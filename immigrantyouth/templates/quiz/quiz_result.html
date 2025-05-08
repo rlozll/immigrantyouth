@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold display-5 text-primary">퀴즈 결과</h1>
+    <p class="lead">총점: {{ score }} / {{ total }}점</p>
+  </div>
+
+  {% for r in results %}
+    <div class="card shadow-sm mb-4 rounded-3">
+      <div class="card-body text-center">
+        <h5 class="card-title mb-4">{{ forloop.counter }}. {{ r.question.text }}</h5>
+
+        <p class="fs-5">
+          당신의 답변: <strong>{{ r.user_answer }}</strong><br>
+          {% if r.is_correct %}
+            ✅ <span class="text-success fw-bold">정답입니다!</span>
+          {% else %}
+            ❌ <span class="text-danger fw-bold">오답입니다.</span><br>
+            <span><strong>해설:</strong> {{ r.question.explanation }}</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

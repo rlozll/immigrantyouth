@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold display-5" style="color: green;">이주배경청소년에 대한 퀴즈를 알아맞혀조!</h1>
+    <p class="text-muted">O 또는 X를 선택하세요. 모든 문항에 응답해야 제출할 수 있습니다.</p>
+  </div>
+
+  {% if error %}
+    <div class="alert alert-danger text-center">{{ error }}</div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    
+    {% for q in questions %}
+    <div class="card shadow-sm mb-4 rounded-3">
+      <div class="card-body text-center" style="padding-top: 5rem; padding-bottom: 5rem;">
+        <h5 class="card-title mb-4">{{ forloop.counter }}. {{ q.text }}</h5>
+    
+        <div class="d-flex justify-content-center gap-5">
+          <div class="form-check">
+            <input class="form-check-input fs-4" type="radio" name="question_{{ q.id }}" value="O" id="q{{ q.id }}o">
+            <label class="form-check-label fs-5 fw-bold" for="q{{ q.id }}o">◯</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input fs-4" type="radio" name="question_{{ q.id }}" value="X" id="q{{ q.id }}x">
+            <label class="form-check-label fs-5 fw-bold" for="q{{ q.id }}x">✕</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-lg btn-success px-5 shadow-sm">
+        <i class="fas fa-leaf me-2"></i> 제출하기
+      </button>      
+    </div>
+  </form>
+</div>
+
+<!-- 자동 스크롤 스크립트 -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const radios = document.querySelectorAll('input[type="radio"]');
+    radios.forEach((radio) => {
+      radio.addEventListener('change', () => {
+        const allCards = document.querySelectorAll('.card');
+        const currentCard = radio.closest('.card');
+        const currentIndex = Array.from(allCards).indexOf(currentCard);
+        const nextCard = allCards[currentIndex + 1];
+
+        if (nextCard) {
+          nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}
