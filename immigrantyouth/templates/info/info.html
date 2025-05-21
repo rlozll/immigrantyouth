@@ -1,1 +1,82 @@
-{% include "base.html" %}
+{% extends "base.html" %}
+{% block content %}
+<h1>이주배경청소년 지원기관 안내</h1>
+
+<style>
+  .toggle-btn {
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 4px;
+  }
+
+  .institution-table {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    display: none;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f8f8f8;
+  }
+</style>
+
+{% for region, institutions in institution_data %}
+  <button class="toggle-btn" onclick="toggleTable('{{ region }}')">
+    {{ region }}
+  </button>
+  <div id="{{ region }}" class="institution-table">
+    <table>
+      <tr>
+        <th>기관명</th>
+        <th>기관구분</th>
+        <th>주소</th>
+        <th>전화번호</th>
+        <th>홈페이지</th>
+      </tr>
+      {% for inst in institutions %}
+      <tr>
+        <td>{{ inst.name }}</td>
+        <td>{{ inst.type }}</td>
+        <td>{{ inst.address }}</td>
+        <td>{{ inst.phone }}</td>
+        <td style="text-align: center;">{% if inst.website %}
+    <a href="{{ inst.website }}" target="_blank">바로가기</a>
+  {% else %}
+    -
+  {% endif %}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endfor %}
+
+<script>
+  function toggleTable(regionId) {
+    const section = document.getElementById(regionId);
+    if (section.style.display === 'none' || section.style.display === '') {
+      section.style.display = 'block';
+    } else {
+      section.style.display = 'none';
+    }
+  }
+</script>
+{% endblock %}
