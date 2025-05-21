@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>이주배경청소년 지원기관 안내</h1>
+<div class="container my-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold display-5" style="color: green;">이주배경청소년 지원기관 알아보기!</h1>
+    <p class="text-muted">이주배경청소년에게 지원을 해주는 기관을 지역별로 자세히 알아보아요!</p>
+  </div>
 
 <style>
   .toggle-btn {
@@ -41,7 +45,7 @@
 
 {% for region, institutions in institution_data %}
   <button class="toggle-btn" onclick="toggleTable('{{ region }}')">
-    {{ region }}
+    {{ forloop.counter }}️⃣{{ region }}
   </button>
   <div id="{{ region }}" class="institution-table">
     <table>
@@ -69,14 +73,42 @@
   </div>
 {% endfor %}
 
+<style>
+  .institution-table {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+  }
+  .institution-table.show {
+    max-height: 1000px; /* 충분히 큰 값 */
+    opacity: 1;
+  }
+</style>
+
 <script>
   function toggleTable(regionId) {
     const section = document.getElementById(regionId);
-    if (section.style.display === 'none' || section.style.display === '') {
-      section.style.display = 'block';
+
+    if (section.classList.contains('show')) {
+      section.classList.remove('show');
+      // display none은 transition 끝나고 적용
+      setTimeout(() => {
+        section.style.display = 'none';
+      }, 300); // transition 시간과 맞춤
     } else {
-      section.style.display = 'none';
+      section.style.display = 'block'; // 먼저 display 켜기
+      setTimeout(() => {
+        section.classList.add('show'); // 그리고 클래스 추가해서 애니메이션 시작
+      }, 10);
     }
   }
+
+  // 초기에는 숨겨놓기
+  window.onload = () => {
+    document.querySelectorAll('.institution-table').forEach(section => {
+      section.style.display = 'none';
+    });
+  };
 </script>
 {% endblock %}
