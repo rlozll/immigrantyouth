@@ -1,0 +1,76 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .owl-carousel .item {
+        margin: 0;
+        padding: 0;
+        }
+
+        .owl-carousel .item img {
+        display: block;
+        width: 100%;
+        object-fit: cover;
+        margin: 0;
+        padding: 0;
+        border-radius: 8px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .owl-carousel .item img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .owl-carousel {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .owl-carousel,
+        .owl-stage,
+        .owl-stage-outer {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+    </style>
+    <meta charset="UTF-8" />
+    <title>이주배경청소년을 알아맞혀조!</title>
+    <link rel="stylesheet" href="{% static 'owl.carousel.min.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+     <script src="{% static 'owl.carousel.min.js' %}"></script>
+
+</head>
+<body>
+    <section style="background-color: #f5fdf7; padding: 60px 0;">
+        <div class="container my-5 justify-content-center">
+            <div class="container text-center mt-5">
+                <h2 class="fw-bold" style="color: #4CAF50;">우리가 진행한 활동들을 소개합니다!<br><br></h2>
+                <!-- <p class="text-muted">이주배경청소년에 대한 이해와 관심을 높이기 위해 제작한 카드뉴스입니다.</p> -->
+            </div>
+            <div class="owl-carousel owl-theme">
+                <div class="item"><a href="https://www.instagram.com/p/DI0_FUchw4V/" target="_blank"><img src="{% static 'images/cardnews1.jpg' %}" alt="cardnews1"></a></div>
+                <div class="item"><a href="https://www.instagram.com/p/DJIzqmZh_qu/" target="_blank"><img src="{% static 'images/cardnews2.jpg' %}" alt="cardnews2"></a></div>
+                <div class="item"><a href="https://www.instagram.com/p/DJukndjTk-D/" target="_blank"><img src="{% static 'images/cardnews3.jpg' %}" alt="cardnews3"></a></div>
+            </div>
+        </div>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            $('.owl-carousel').owlCarousel({
+            loop: true,
+            margin: 0,
+            nav: true,
+            items: 3, // 한 번에 보여줄 이미지 수
+            stagePadding: 0,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true
+            });
+        });
+    </script>
+
+</body>
+</html>

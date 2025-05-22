@@ -5,21 +5,15 @@
 <div class="container my-5">
   <div class="text-center mb-5">
     <h1 class="fw-bold display-5" style="color: green;">이주배경청소년에 대한 퀴즈를 알아맞혀조!</h1>
-    <p class="text-muted">O 또는 X를 선택하세요. 모든 문항에 응답해야 제출할 수 있습니다.</p>
+    <p class="text-muted">O 또는 X를 선택하면 정답과 해설을 확인할 수 있습니다.</p>
   </div>
 
-  {% if error %}
-    <div class="alert alert-danger text-center">{{ error }}</div>
-  {% endif %}
-
-  <form method="post">
-    {% csrf_token %}
-    
+  <form>
     {% for q in questions %}
-    <div class="card shadow-sm mb-4 rounded-3">
+    <div class="card shadow-sm mb-4 rounded-3 question-card" data-answer="{{ q.correct_answer }}" data-explanation="{{ q.explanation|linebreaksbr }}">
       <div class="card-body text-center" style="padding-top: 5rem; padding-bottom: 5rem;">
-        <h5 class="card-title mb-4">{{ forloop.counter }}. {{ q.text }}</h5>
-    
+        <h5 class="card-title mb-4 fw-bold text-dark">{{ forloop.counter }}. {{ q.text }}</h5>
+
         <div class="d-flex justify-content-center gap-5">
           <div class="form-check">
             <input class="form-check-input fs-4" type="radio" name="question_{{ q.id }}" value="O" id="q{{ q.id }}o">
@@ -30,31 +24,43 @@
             <label class="form-check-label fs-5 fw-bold" for="q{{ q.id }}x">✕</label>
           </div>
         </div>
+
+        <!-- 결과 출력 영역 -->
+        <div class="result mt-4 fs-5 fw-semibold"></div>
       </div>
     </div>
     {% endfor %}
-
-    <div class="text-center">
-      <button type="submit" class="btn btn-lg btn-success px-5 shadow-sm">
-        <i class="fas fa-leaf me-2"></i> 제출하기
-      </button>      
-    </div>
   </form>
 </div>
 
-<!-- 자동 스크롤 스크립트 -->
+<!-- JS: 정답 선택 시 즉시 해설 표시 + 자동 스크롤 -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const radios = document.querySelectorAll('input[type="radio"]');
+
     radios.forEach((radio) => {
       radio.addEventListener('change', () => {
-        const allCards = document.querySelectorAll('.card');
-        const currentCard = radio.closest('.card');
-        const currentIndex = Array.from(allCards).indexOf(currentCard);
-        const nextCard = allCards[currentIndex + 1];
+        const card = radio.closest('.question-card');
+        const correct = card.dataset.answer.trim().toUpperCase();
+        const explanation = card.dataset.explanation;
+        const selected = radio.value.trim().toUpperCase();
 
+        const resultBox = card.querySelector('.result');
+
+        if (selected === correct) {
+          resultBox.innerHTML = `<span class="text-success"><br>✅ 정답입니다!</span><br><br><span class="fw-normal">${explanation}</span>`;
+        } else {
+          resultBox.innerHTML = `<span class="text-danger"><br>❌ 오답입니다.</span><br><br><span class="fw-normal">${explanation}</span>`;
+        }
+
+        // 다음 카드로 부드럽게 스크롤
+        const allCards = document.querySelectorAll('.question-card');
+        const currentIndex = Array.from(allCards).indexOf(card);
+        const nextCard = allCards[currentIndex + 1];
         if (nextCard) {
-          nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setTimeout(() => {
+            nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 500);
         }
       });
     });
