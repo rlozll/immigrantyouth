@@ -39,7 +39,7 @@ def get_secret(setting):
 SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # 배포 전에 False로 바꾸기
+DEBUG = False # 배포 전에 False로 바꾸기
 
 ALLOWED_HOSTS = ["diveintocean.pythonanywhere.com",
                  "whoarethey.site",
@@ -135,11 +135,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'static',
+# ]
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, '.staticfiles')
+
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    os.path.join(BASE_DIR, 'static'),
 ]
-# STATIC_ROOT = os.path.join(BASE_DIR, '.staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
